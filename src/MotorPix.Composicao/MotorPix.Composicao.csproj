@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>MotorPix.Composicao</RootNamespace>
+    <AssemblyName>MotorPix.Composicao</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MotorPix.Dominio\MotorPix.Dominio.csproj" />
+    <ProjectReference Include="..\MotorPix.Mensagens\MotorPix.Mensagens.csproj" />
+    <ProjectReference Include="..\MotorPix.Contratos\MotorPix.Contratos.csproj" />
+    <ProjectReference Include="..\MotorPix.Dict\MotorPix.Dict.csproj" />
+    <ProjectReference Include="..\MotorPix.Conciliacao\MotorPix.Conciliacao.csproj" />
+    <ProjectReference Include="..\MotorPix.Spi\MotorPix.Spi.csproj" />
+    <ProjectReference Include="..\MotorPix.Psp.Nucleo\MotorPix.Psp.Nucleo.csproj" />
+    <ProjectReference Include="..\MotorPix.PspPagador\MotorPix.PspPagador.csproj" />
+    <ProjectReference Include="..\MotorPix.PspRecebedor\MotorPix.PspRecebedor.csproj" />
+  </ItemGroup>
+
+</Project>

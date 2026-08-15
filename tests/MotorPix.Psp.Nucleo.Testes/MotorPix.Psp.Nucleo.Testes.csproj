@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>MotorPix.Psp.Nucleo.Testes</RootNamespace>
+    <AssemblyName>MotorPix.Psp.Nucleo.Testes</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\MotorPix.Dominio\MotorPix.Dominio.csproj" />
+    <ProjectReference Include="..\..\src\MotorPix.Mensagens\MotorPix.Mensagens.csproj" />
+    <ProjectReference Include="..\..\src\MotorPix.Contratos\MotorPix.Contratos.csproj" />
+    <ProjectReference Include="..\..\src\MotorPix.Psp.Nucleo\MotorPix.Psp.Nucleo.csproj" />
+    <ProjectReference Include="..\MotorPix.Testes.Comum\MotorPix.Testes.Comum.csproj" />
+  </ItemGroup>
+
+  <!--
+    O diagrama normativo entra como recurso embarcado: o teste de exaustividade parseia o .mermaid
+    e compara com a tabela escrita a mao. Se alguem editar o arquivo normativo, a suite quebra ate
+    o codigo acompanhar.
+  -->
+  <ItemGroup>
+    <EmbeddedResource Include="..\..\motor-pix-maquina-estados.mermaid" LogicalName="maquina-de-estados.mermaid" />
+  </ItemGroup>
+
+</Project>

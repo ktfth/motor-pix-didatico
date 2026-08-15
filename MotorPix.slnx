@@ -1,0 +1,23 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/MotorPix.Composicao/MotorPix.Composicao.csproj" />
+    <Project Path="src/MotorPix.Conciliacao/MotorPix.Conciliacao.csproj" />
+    <Project Path="src/MotorPix.Contratos/MotorPix.Contratos.csproj" />
+    <Project Path="src/MotorPix.Dict/MotorPix.Dict.csproj" />
+    <Project Path="src/MotorPix.Dominio/MotorPix.Dominio.csproj" />
+    <Project Path="src/MotorPix.Mensagens/MotorPix.Mensagens.csproj" />
+    <Project Path="src/MotorPix.Psp.Nucleo/MotorPix.Psp.Nucleo.csproj" />
+    <Project Path="src/MotorPix.PspPagador/MotorPix.PspPagador.csproj" />
+    <Project Path="src/MotorPix.PspRecebedor/MotorPix.PspRecebedor.csproj" />
+    <Project Path="src/MotorPix.Spi/MotorPix.Spi.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/MotorPix.Arquitetura.Testes/MotorPix.Arquitetura.Testes.csproj" />
+    <Project Path="tests/MotorPix.Dict.Testes/MotorPix.Dict.Testes.csproj" />
+    <Project Path="tests/MotorPix.Dominio.Testes/MotorPix.Dominio.Testes.csproj" />
+    <Project Path="tests/MotorPix.Especificacoes/MotorPix.Especificacoes.csproj" />
+    <Project Path="tests/MotorPix.Fluxos.Testes/MotorPix.Fluxos.Testes.csproj" />
+    <Project Path="tests/MotorPix.Psp.Nucleo.Testes/MotorPix.Psp.Nucleo.Testes.csproj" />
+    <Project Path="tests/MotorPix.Testes.Comum/MotorPix.Testes.Comum.csproj" />
+  </Folder>
+</Solution>

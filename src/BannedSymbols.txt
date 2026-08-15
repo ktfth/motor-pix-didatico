@@ -1,0 +1,15 @@
+T:System.Decimal;Invariante 1: dinheiro e long em centavos dentro de Valor. decimal e proibido no dominio.
+T:System.Double;Invariante 1: dinheiro e long em centavos dentro de Valor. double e proibido no dominio.
+T:System.Single;Invariante 1: dinheiro e long em centavos dentro de Valor. float e proibido no dominio.
+P:System.DateTime.UtcNow;Invariante 9: tempo so entra via IClock injetado.
+P:System.DateTime.Now;Invariante 9: tempo so entra via IClock injetado.
+P:System.DateTime.Today;Invariante 9: tempo so entra via IClock injetado.
+P:System.DateTimeOffset.UtcNow;Invariante 9: tempo so entra via IClock injetado.
+P:System.DateTimeOffset.Now;Invariante 9: tempo so entra via IClock injetado.
+P:System.TimeProvider.System;Invariante 9: tempo so entra via IClock injetado. TimeProvider e a abstracao idiomatica do .NET 8 e por isso e a primeira coisa que alguem alcanca.
+M:System.Diagnostics.Stopwatch.GetTimestamp;Invariante 9: tempo so entra via IClock injetado.
+P:System.Environment.TickCount64;Invariante 9: tempo so entra via IClock injetado.
+M:System.Guid.NewGuid;Fonte ambiental nao injetada: quebra o replay por semente. Injete IFonteAleatoria.
+T:System.Random;Fonte ambiental nao injetada: quebra o replay por semente. Injete IFonteAleatoria.
+M:System.Threading.Thread.Sleep;Espera real em codigo de dominio: o tempo e parametro, nao pausa.
+M:System.Threading.Tasks.Task.Delay;Espera real em codigo de dominio: o tempo e parametro, nao pausa.

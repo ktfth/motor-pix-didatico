@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>MotorPix.Especificacoes</RootNamespace>
+    <AssemblyName>MotorPix.Especificacoes</AssemblyName>
+  </PropertyGroup>
+
+  <!--
+    Mesma regra do projeto de fluxos: o motor e consumido pelo composition root, como um host faria.
+    Nenhuma referencia a modulo individual, para que nenhum cenario alcance tipo interno de modulo.
+  -->
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\MotorPix.Dominio\MotorPix.Dominio.csproj" />
+    <ProjectReference Include="..\..\src\MotorPix.Mensagens\MotorPix.Mensagens.csproj" />
+    <ProjectReference Include="..\..\src\MotorPix.Contratos\MotorPix.Contratos.csproj" />
+    <ProjectReference Include="..\..\src\MotorPix.Psp.Nucleo\MotorPix.Psp.Nucleo.csproj" />
+    <ProjectReference Include="..\..\src\MotorPix.Composicao\MotorPix.Composicao.csproj" />
+    <ProjectReference Include="..\MotorPix.Testes.Comum\MotorPix.Testes.Comum.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SpecFlow.xUnit" />
+    <PackageReference Include="SpecFlow.Tools.MsBuild.Generation" />
+  </ItemGroup>
+
+</Project>

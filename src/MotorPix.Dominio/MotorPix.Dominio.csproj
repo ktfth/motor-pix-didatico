@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>MotorPix.Dominio</RootNamespace>
+    <AssemblyName>MotorPix.Dominio</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="MotorPix.Dominio.Testes" />
+  </ItemGroup>
+
+</Project>

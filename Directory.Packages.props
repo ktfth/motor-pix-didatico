@@ -1,0 +1,31 @@
+<Project>
+
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageVersion Include="Microsoft.CodeAnalysis.BannedApiAnalyzers" Version="4.14.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+    <PackageVersion Include="xunit" Version="2.9.3" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="2.8.2" />
+    <PackageVersion Include="FsCheck.Xunit" Version="3.3.4" />
+  </ItemGroup>
+
+  <!--
+    SpecFlow 3.9.74 e a ultima versao publicada: o produto foi descontinuado e nao recebe mais
+    correcao. A versao esta fixada aqui de proposito, e nao ha para onde atualizar — se o toolchain
+    quebrar num SDK futuro, a saida e migrar para o Reqnroll (fork sucessor, do autor original),
+    nao esperar patch. Sondado antes de adotar: gera, compila sob TreatWarningsAsErrors e passa
+    pelo BannedApiAnalyzers sem um aviso.
+  -->
+  <ItemGroup>
+    <PackageVersion Include="SpecFlow.xUnit" Version="3.9.74" />
+    <PackageVersion Include="SpecFlow.Tools.MsBuild.Generation" Version="3.9.74" />
+  </ItemGroup>
+
+</Project>

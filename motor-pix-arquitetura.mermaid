@@ -1,0 +1,75 @@
+flowchart TB
+    PAYER["Cliente Pagador"]
+    PAYEE["Cliente Recebedor"]
+
+    subgraph MONO["MOTOR PIX — processo único, módulos conversando por interface in-process"]
+        direction TB
+
+        subgraph PSPP["Módulo PspPagador"]
+            API_P["API de pagamento<br/>idempotência por EndToEndId<br/>unique constraint + replay da resposta"]
+            SM_P["Máquina de estados<br/>da transação"]
+            LEDGER_P[("Ledger interno pagador<br/>cliente ↔ espelho conta PI<br/>partidas dobradas, long em centavos")]
+        end
+
+        subgraph DICTM["Módulo Dict"]
+            DICT["Diretório de chaves<br/>chave → ISPB + conta"]
+        end
+
+        subgraph SPIM["Módulo Spi"]
+            VAL["Validação pacs.008<br/>+ dedup por EndToEndId<br/>+ consulta de status"]
+            LIQ["Liquidação atômica<br/>débito PI pagador +<br/>crédito PI recebedor"]
+            LEDGER_SPI[("Ledger SPI<br/>contas PI dos participantes<br/>saldo ≥ 0, sem crédito")]
+        end
+
+        subgraph PSPR["Módulo PspRecebedor"]
+            SM_R["Handler pacs.002 / pacs.004"]
+            LEDGER_R[("Ledger interno recebedor<br/>espelho conta PI ↔ cliente")]
+        end
+
+        subgraph RECON["Conciliação"]
+            MATCH["Ledgers PSP × Ledger SPI<br/>fecha os casos EXPIRADA"]
+        end
+    end
+
+    subgraph XCUT["Transversal de teste"]
+        CLOCK["IClock injetado<br/>timeout determinístico"]
+        PROP["Propriedade: Σ saldos do sistema<br/>constante sob falhas injetadas"]
+    end
+
+    PAYER -->|"1. iniciar pagamento (E2E)"| API_P
+    API_P <-->|"2. resolver chave"| DICT
+    API_P --> SM_P
+    SM_P -->|"3. débito do cliente<br/>(lançamento)"| LEDGER_P
+    SM_P -->|"4. pacs.008"| VAL
+    VAL --> LIQ
+    LIQ -->|"5. lançamento atômico"| LEDGER_SPI
+    LIQ -->|"6. pacs.002 ACSC/RJCT"| SM_P
+    LIQ -->|"6. pacs.002 ACSC"| SM_R
+    SM_R -->|"7. crédito do cliente<br/>(lançamento)"| LEDGER_R
+    SM_R --> PAYEE
+
+    SM_P -.->|"EXPIRADA → consulta de status<br/>timeout ≠ falha"| VAL
+    SM_R -.->|"pacs.004 — devolução:<br/>transação NOVA ref. E2E original"| VAL
+
+    LEDGER_P --> MATCH
+    LEDGER_SPI --> MATCH
+    LEDGER_R --> MATCH
+
+    MATCH -.->|"manda consultar o status<br/>(ADR-013: quem responde e o SPI, pela seta pontilhada acima)"| SM_P
+    MATCH -.->|"manda consultar e reprocessar credito pendente<br/>(idempotente pela chave do ledger)"| SM_R
+
+    XCUT -.-> MONO
+
+    classDef ledgerCore fill:#fff3cd,stroke:#d63384,stroke-width:3px,color:#000
+    classDef hotpath fill:#cfe2ff,stroke:#0d6efd,color:#000
+    classDef dictm fill:#d1e7dd,stroke:#198754,color:#000
+    classDef reconcile fill:#e2d9f3,stroke:#6f42c1,color:#000
+    classDef xcut fill:#fff8e1,stroke:#b8860b,stroke-dasharray: 5 5,color:#000
+    classDef actor fill:#e9ecef,stroke:#6c757d,color:#000
+
+    class LEDGER_P,LEDGER_SPI,LEDGER_R ledgerCore
+    class API_P,SM_P,VAL,LIQ,SM_R hotpath
+    class DICT dictm
+    class MATCH reconcile
+    class CLOCK,PROP xcut
+    class PAYER,PAYEE actor

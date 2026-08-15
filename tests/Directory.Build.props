@@ -1,0 +1,42 @@
+<Project>
+
+  <Import Project="$([MSBuild]::GetPathOfFileAbove($(MSBuildThisFile), $(MSBuildThisFileDirectory)..\))" />
+
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+    <!-- MotorPix.Testes.Comum e biblioteca de apoio, nao suite: nao carrega runner nem host de teste. -->
+    <EhSuiteDeTestes Condition="'$(MSBuildProjectName)' != 'MotorPix.Testes.Comum'">true</EhSuiteDeTestes>
+    <EhSuiteDeTestes Condition="'$(MSBuildProjectName)' == 'MotorPix.Testes.Comum'">false</EhSuiteDeTestes>
+    <IsTestProject>$(EhSuiteDeTestes)</IsTestProject>
+  </PropertyGroup>
+
+  <!--
+    Os mesmos simbolos banidos valem nos testes. A rede de compilacao parava na fronteira de src/,
+    mas o criterio de aceite que mais depende dela e de teste: um EndToEndId.Compor montado com
+    DateTimeOffset.UtcNow compila, passa, e torna o contraexemplo da semente irreproduzivel.
+    RelogioFake nao precisa de excecao: ele recebe o instante, nunca o le do ambiente.
+  -->
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.BannedApiAnalyzers">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <AdditionalFiles Include="$(MSBuildThisFileDirectory)..\src\BannedSymbols.txt" />
+  </ItemGroup>
+
+  <!--
+    A biblioteca de apoio nao referencia xunit: sem o pacote, 'dotnet test' na solucao deixa de
+    tentar carregar um testhost para ela. Marcar IsTestProject=false nao bastava — o runner ainda
+    enfileirava o assembly e falhava ao resolver as dependencias de host.
+  -->
+  <ItemGroup Condition="'$(EhSuiteDeTestes)' == 'true'">
+    <PackageReference Include="xunit" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="xunit.runner.visualstudio">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <Using Include="Xunit" />
+  </ItemGroup>
+
+</Project>

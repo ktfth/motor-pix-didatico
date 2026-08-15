@@ -1,0 +1,47 @@
+stateDiagram-v2
+    [*] --> RECEBIDA: POST pagamento com E2E inédito
+
+    RECEBIDA --> VALIDADA: DICT resolve chave + saldo do cliente ok
+    RECEBIDA --> REJEITADA: validação local falha
+
+    VALIDADA --> ENVIADA_SPI: débito interno lançado + pacs.008 enviado
+
+    ENVIADA_SPI --> LIQUIDADA: pacs.002 ACSC
+    ENVIADA_SPI --> REJEITADA: pacs.002 RJCT
+    ENVIADA_SPI --> EXPIRADA: timeout via IClock, sem pacs.002
+
+    EXPIRADA --> LIQUIDADA: consulta de status confirma liquidação
+    EXPIRADA --> REJEITADA: consulta de status confirma rejeição
+
+    LIQUIDADA --> DEVOLVIDA: pacs.004 liquidada (transação nova ref. E2E original)
+
+    LIQUIDADA --> [*]
+    REJEITADA --> [*]
+    DEVOLVIDA --> [*]
+
+    note right of RECEBIDA
+        E2E repetido nunca cria estado:
+        unique constraint devolve o
+        resultado da transação original.
+    end note
+
+    note right of EXPIRADA
+        Timeout não é falha.
+        Proibido estornar ou confirmar
+        sem consultar o SPI; o que a
+        consulta não fechar, a
+        conciliação fecha.
+    end note
+
+    note right of REJEITADA
+        Se houve débito interno,
+        o estorno é lançamento novo
+        no ledger — nunca UPDATE.
+    end note
+
+    note left of DEVOLVIDA
+        Devolução não reabre nem
+        altera a original: é transação
+        própria, com E2E próprio,
+        referenciando a liquidada.
+    end note

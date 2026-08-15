@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>MotorPix.PspPagador</RootNamespace>
+    <AssemblyName>MotorPix.PspPagador</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MotorPix.Dominio\MotorPix.Dominio.csproj" />
+    <ProjectReference Include="..\MotorPix.Mensagens\MotorPix.Mensagens.csproj" />
+    <ProjectReference Include="..\MotorPix.Contratos\MotorPix.Contratos.csproj" />
+    <ProjectReference Include="..\MotorPix.Psp.Nucleo\MotorPix.Psp.Nucleo.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>MotorPix.Fluxos.Testes</RootNamespace>
+    <AssemblyName>MotorPix.Fluxos.Testes</AssemblyName>
+  </PropertyGroup>
+
+  <!--
+    Os testes de fluxo consomem o motor pelo composition root, como um host faria: nenhuma
+    referencia a modulo individual, para que nenhum teste possa alcancar um tipo interno de modulo.
+  -->
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\MotorPix.Dominio\MotorPix.Dominio.csproj" />
+    <ProjectReference Include="..\..\src\MotorPix.Mensagens\MotorPix.Mensagens.csproj" />
+    <ProjectReference Include="..\..\src\MotorPix.Contratos\MotorPix.Contratos.csproj" />
+    <ProjectReference Include="..\..\src\MotorPix.Psp.Nucleo\MotorPix.Psp.Nucleo.csproj" />
+    <ProjectReference Include="..\..\src\MotorPix.Composicao\MotorPix.Composicao.csproj" />
+    <ProjectReference Include="..\MotorPix.Testes.Comum\MotorPix.Testes.Comum.csproj" />
+  </ItemGroup>
+
+</Project>

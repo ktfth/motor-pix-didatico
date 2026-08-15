@@ -1,0 +1,24 @@
+<Project>
+
+  <!-- Herda o Directory.Build.props da raiz antes de acrescentar as regras de src/. -->
+  <Import Project="$([MSBuild]::GetPathOfFileAbove($(MSBuildThisFile), $(MSBuildThisFileDirectory)..\))" />
+
+  <!--
+    Invariantes 1 e 9 como erro de compilacao, e nao como disciplina de revisao.
+    MotorPix.Composicao e o composition root: e o unico projeto autorizado a instanciar
+    o relogio de sistema, entao e o unico que nao carrega a lista de simbolos banidos.
+  -->
+  <ItemGroup Condition="'$(MSBuildProjectName)' != 'MotorPix.Composicao'">
+    <PackageReference Include="Microsoft.CodeAnalysis.BannedApiAnalyzers">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <AdditionalFiles Include="$(MSBuildThisFileDirectory)BannedSymbols.txt" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <!-- RS0030 = uso de simbolo banido. Redundante com TreatWarningsAsErrors, mas explicito. -->
+    <WarningsAsErrors>$(WarningsAsErrors);RS0030</WarningsAsErrors>
+  </PropertyGroup>
+
+</Project>

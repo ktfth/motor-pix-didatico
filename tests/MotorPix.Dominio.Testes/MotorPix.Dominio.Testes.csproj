@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>MotorPix.Dominio.Testes</RootNamespace>
+    <AssemblyName>MotorPix.Dominio.Testes</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FsCheck.Xunit" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\MotorPix.Dominio\MotorPix.Dominio.csproj" />
+    <ProjectReference Include="..\MotorPix.Testes.Comum\MotorPix.Testes.Comum.csproj" />
+  </ItemGroup>
+
+</Project>

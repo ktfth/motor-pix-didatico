@@ -1,0 +1,22 @@
+<Project>
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <LangVersion>12.0</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <IsPackable>false</IsPackable>
+
+    <!--
+      Invariante 1 (dinheiro e long em centavos): overflow silencioso de long quebraria a soma
+      de saldos sem lancar nada. Este e o pior modo de falha do projeto, entao aritmetica
+      verificada e o default da solucao inteira, nao uma anotacao pontual.
+    -->
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <EnforceCodeStyleInBuild>false</EnforceCodeStyleInBuild>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+  </PropertyGroup>
+
+</Project>

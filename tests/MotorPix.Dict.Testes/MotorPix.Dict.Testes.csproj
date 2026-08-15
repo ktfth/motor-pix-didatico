@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>MotorPix.Dict.Testes</RootNamespace>
+    <AssemblyName>MotorPix.Dict.Testes</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\MotorPix.Dominio\MotorPix.Dominio.csproj" />
+    <ProjectReference Include="..\..\src\MotorPix.Contratos\MotorPix.Contratos.csproj" />
+    <ProjectReference Include="..\..\src\MotorPix.Dict\MotorPix.Dict.csproj" />
+    <ProjectReference Include="..\MotorPix.Testes.Comum\MotorPix.Testes.Comum.csproj" />
+  </ItemGroup>
+
+</Project>

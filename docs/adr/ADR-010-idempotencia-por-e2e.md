@@ -1,0 +1,15 @@
+# ADR-010 — Idempotência por EndToEndId: duas camadas, snapshot congelado e compensação condicionada
+
+**Contexto.** O invariante 5 exige unicidade por `EndToEndId` e que o reenvio devolva a resposta original sem novo lançamento. A nota do diagrama de estados acrescenta que "E2E repetido nunca cria estado".
+
+**Decisão 1 — duas camadas, com semânticas diferentes e índices independentes.** A API do PSP deduplica o **pedido do cliente**, indexado pelo E2E que veio no POST. O SPI deduplica a **mensagem interna**, indexada pelo E2E do `pacs.008`. São coisas diferentes, e por isso o `pacs.004` do gate 6 — que tem E2E próprio — nunca colidirá com o `pacs.008` que ele referencia. Abaixo das duas está a terceira e última linha: a `ChaveIdempotencia` do ledger, que recusa o par `(E2E, etapa)` repetido venha ele por qual caminho vier.
+
+**Decisão 2 — reivindicação por insert atômico, antes de qualquer consulta externa.** Consultar o DICT primeiro e reivindicar depois seria check-then-act: dois POSTs simultâneos fariam duas resoluções de chave antes de a colisão ser notada.
+
+**Decisão 3 — a resposta é snapshot congelado, não projeção viva.** O diagrama diz literalmente "replay da resposta". Um reenvio feito depois de a transação liquidar devolve `ENVIADA_SPI` — o que foi respondido na primeira vez —, não `LIQUIDADA`. A alternativa faria o cliente ver duas respostas diferentes para o mesmo pedido. **Custo aceito e registrado:** quem reenvia para descobrir o estado atual recebe informação desatualizada sem saber disso; a consulta de status própria é do gate 5.
+
+**Decisão 4 — payload divergente é conflito (D3).** A impressão digital é canônica: conta de origem, chave **normalizada** e centavos. A normalização é o que impede o falso conflito entre duas grafias do mesmo CPF. Divergência lança `E2eConflitanteException`. Desvio declarado da letra de `prompt:20`, aprovado pelo dono.
+
+**Decisão 5 — o mesmo rigor no SPI.** A primeira versão do dedup do SPI comparava só o E2E, e portanto fazia exatamente o replay cego que a D3 proibiu na camada de cima: um `pacs.008` com o mesmo E2E e outro creditor receberia de volta um ACSC cujo `OrgnlTxRef` descreve uma ordem diferente — o SPI afirmando "liquidado" para algo que nunca tocou o ledger. Agora o SPI guarda a impressão da ordem e responde `RJCT / OrdemInvalida` à reentrega divergente. Como nenhuma exceção pode sair de `ReceberPacs008`, a recusa é status e não exceção.
+
+**Decisão 6 — a compensação da reivindicação órfã é condicionada ao ledger.** Se o processamento falha, soltar a reivindicação permite ao cliente reenviar, que é o comportamento correto. Mas **só quando nada irreversível foi gravado**: o ledger é append-only e não volta atrás junto. Uma primeira versão soltava incondicionalmente, e com falha injetada no despacho da seta 4 o resultado era cliente debitado, `TryTransacao` falso, registro vazio e nenhuma divergência anotada — só o ledger sabia, e a soma continuava constante, então nenhuma propriedade contábil acusava. Com débito lançado, o E2E fica queimado de propósito e a transação permanece como registro para a conciliação do gate 7 encontrar.

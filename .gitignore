@@ -1,0 +1,42 @@
+# Artefatos de build
+bin/
+obj/
+[Dd]ebug/
+[Rr]elease/
+artifacts/
+*.user
+*.suo
+*.userprefs
+
+# Code-behind gerado pelo SpecFlow a partir dos .feature.
+# O gerador roda no build (SpecFlow.Tools.MsBuild.Generation), entao versionar isto so criaria
+# uma segunda copia da especificacao, capaz de divergir do .feature que a origina.
+*.feature.cs
+
+# Resultados de teste e cobertura
+[Tt]est[Rr]esult*/
+coverage*.json
+coverage*.xml
+coverage*.info
+*.trx
+*.coverage
+
+# IDE
+.vs/
+.vscode/
+.idea/
+*.swp
+*~
+
+# Sistema operacional
+[Tt]humbs.db
+ehthumbs.db
+Desktop.ini
+.DS_Store
+
+# NuGet
+*.nupkg
+*.snupkg
+.nuget/
+packages/
+!packages/build/
