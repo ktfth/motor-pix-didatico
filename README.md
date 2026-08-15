@@ -12,11 +12,41 @@ O código serve os diagramas, não o contrário. Quando um deles muda, a suíte 
 
 ## Como rodar
 
+**Não há executável.** Todos os 17 projetos são biblioteca ou suíte de teste: comunicação HTTP e host estão declarados fora de escopo em [`prompt-motor-pix.md`](prompt-motor-pix.md). Os módulos conversam in-process, por interface. Rodar este projeto significa **executar a verificação** — é a suíte que exercita o motor de ponta a ponta, do POST ao crédito do recebedor.
+
+**Pré-requisito:** SDK .NET 8 ou superior. O alvo é `net8.0`; SDKs mais novos compilam via targeting pack, sem ajuste. Nada além disso — sem banco, sem Docker, sem variável de ambiente, sem serviço externo.
+
 ```bash
+git clone https://github.com/ktfth/motor-pix-didatico.git
+cd motor-pix-didatico
 dotnet test MotorPix.slnx
 ```
 
-928 testes, build sem warnings: 824 em C# e 104 cenários Gherkin executáveis.
+Numa máquina limpa isso leva cerca de um minuto: ~9s de restore, ~28s de build, ~30s de testes. O `dotnet test` faz restore e build sozinho — os passos separados abaixo servem para isolar onde algo falhou:
+
+```bash
+dotnet restore MotorPix.slnx
+dotnet build   MotorPix.slnx --no-restore
+dotnet test    MotorPix.slnx --no-build
+```
+
+Saída esperada, por suíte:
+
+| Suíte | Testes |
+|---|---|
+| `MotorPix.Dominio.Testes` | 605 |
+| `MotorPix.Fluxos.Testes` | 130 |
+| `MotorPix.Especificacoes` | 104 |
+| `MotorPix.Dict.Testes` | 39 |
+| `MotorPix.Psp.Nucleo.Testes` | 27 |
+| `MotorPix.Arquitetura.Testes` | 23 |
+| **Total** | **928** |
+
+> O primeiro `dotnet build` num clone novo **gera** os `*.feature.cs` a partir dos `.feature` — eles não são versionados de propósito. Sem esse build, os cenários não existem para o runner.
+
+928 testes, build sem warnings: **852 em C# e 76 cenários Gherkin executáveis**.
+
+> Os 76 cenários vêm de 45 blocos escritos — 9 deles são `Esquema do Cenário`, que a expansão dos `Exemplos` transforma em 31 casos. O projeto `MotorPix.Especificacoes` reporta 104 testes porque inclui, além dos cenários, 28 `[Fact]` que testam as próprias ferramentas de tradução (`Dinheiro`, `Vocabulario`) — esses contam como C#.
 
 Para rodar um gate específico do roteiro:
 
@@ -70,7 +100,7 @@ O grafo de dependências é imposto por teste: `MotorPix.Arquitetura.Testes` lê
 
 ### Especificações executáveis
 
-- **`MotorPix.Especificacoes`** — o mesmo comportamento em Gherkin (SpecFlow), legível por quem não lê C#: 6 funcionalidades, 104 cenários. Entra pelo composition root, como os testes de fluxo — um cenário em linguagem de negócio não ganha permissão que um `[Fact]` não tem. Veja [ADR-015](docs/adr/ADR-015-especificacoes-executaveis.md) para por que o dinheiro do cenário nunca vira `decimal` e por que os nomes do diagrama são traduzidos por nome, nunca por posição.
+- **`MotorPix.Especificacoes`** — o mesmo comportamento em Gherkin (SpecFlow), legível por quem não lê C#: 6 funcionalidades, 76 cenários. Entra pelo composition root, como os testes de fluxo — um cenário em linguagem de negócio não ganha permissão que um `[Fact]` não tem. Veja [ADR-015](docs/adr/ADR-015-especificacoes-executaveis.md) para por que o dinheiro do cenário nunca vira `decimal` e por que os nomes do diagrama são traduzidos por nome, nunca por posição.
 
 ## Os nove invariantes, e o que impõe cada um
 

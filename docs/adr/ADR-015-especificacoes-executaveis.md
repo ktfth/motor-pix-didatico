@@ -1,6 +1,6 @@
 # ADR-015 — Especificações executáveis com SpecFlow
 
-**Contexto.** O projeto tinha cobertura alta (824 testes) escrita inteiramente em C#. Foi pedida a adoção de SpecFlow, para que o comportamento do motor também exista em linguagem de domínio, legível por quem não lê C#.
+**Contexto.** O projeto tinha cobertura alta (824 testes na época) escrita inteiramente em C#. Foi pedida a adoção de SpecFlow, para que o comportamento do motor também exista em linguagem de domínio, legível por quem não lê C#.
 
 **A recomendação foi contrária, e o registro é honesto quanto a isso.** O argumento contra: a especificação deste motor já está formalizada em dois `.mermaid` normativos, mais precisos que prosa; e a máquina de estados já tem vínculo mecânico com o código — o `.mermaid` entra como recurso embarcado e um teste o confronta com a tabela escrita à mão. Uma `.feature` seria uma terceira redação do mesmo conteúdo, sem vínculo mecânico com nada, portanto mais uma fonte para dessincronizar. **A decisão do dono do projeto foi adotar assim mesmo, e é ela que vale.** Esta ADR registra a decisão e as condições em que ela foi tomada, não a discussão.
 
@@ -16,7 +16,7 @@
 
 **O que estas especificações são, e o que não são.** Elas **não** substituem nenhuma suíte existente e nada foi removido. As propriedades contábeis, a matriz exaustiva 7×9, os oráculos de replay e as regressões continuam onde estavam, porque nenhuma delas é exprimível em Gherkin sem perder força. O que as `.feature` acrescentam é uma segunda leitura do mesmo comportamento, na linguagem de quem usa o motor.
 
-**Decisão 6 — os cenários foram medidos por mutação, não por contagem.** 104 cenários verdes não provam nada até que se saiba o que os deixa vermelhos. Duas mutações foram plantadas no motor e revertidas:
+**Decisão 6 — os cenários foram medidos por mutação, não por contagem.** 76 cenários verdes não provam nada até que se saiba o que os deixa vermelhos. Duas mutações foram plantadas no motor e revertidas:
 
 | Mutação plantada | Cenários | Suíte C# |
 |---|---|---|
